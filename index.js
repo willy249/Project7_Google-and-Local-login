@@ -10,9 +10,11 @@ const session = require("express-session");
 const passport = require("passport");
 const flash = require("connect-flash");
 
+const port = process.env.PORT || 8080;
+
 // 連結mongoose
 mongoose
-  .connect("mongodb://127.0.0.1:27017/GoogleDB")
+  .connect(process.env.MONGODB_CONNECTION)
   .then(() => {
     console.log("Connexting to mongodb。。。");
   })
@@ -29,7 +31,6 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false },
   })
 );
 app.use(passport.initialize()); // 初始化 Passport
@@ -49,6 +50,6 @@ app.get("/", (req, res) => {
   return res.render("index", { user: req.user });
 });
 
-app.listen(8080, () => {
+app.listen(port, () => {
   console.log("Server running on port 8080。。。");
 });
